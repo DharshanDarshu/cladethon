@@ -36,12 +36,11 @@ function SliderComponent() {
     <Slider {...settings}>
       {bannerArray.map((banner) => (
         <div>
-          <Image
+          <img
             src={banner}
             className='w-full'
             width={800}
             height={800}
-            priority
             alt=''
           />
         </div>

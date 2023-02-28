@@ -4,7 +4,7 @@ import React from "react";
 function Category() {
   return (
     <div className='relative w-[170px] min-h-[120px] cursor-pointer'>
-      <Image
+      <img
         src='/assests/banner.jpg'
         alt=''
         className='w-full h-full object-cover rounded-xl'

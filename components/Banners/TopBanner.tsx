@@ -4,7 +4,7 @@ function TopBanner() {
   return (
     <div className='flex space-x-2'>
       <div className='relative flex-1'>
-        <Image
+        <img
           src='/assests/banner-6.jpg'
           alt=''
           width={800}
@@ -21,7 +21,7 @@ function TopBanner() {
         </div>
       </div>
       <div className='relative'>
-        <Image
+        <img
           src='/assests/banner5.jpg'
           alt=''
           width={800}
