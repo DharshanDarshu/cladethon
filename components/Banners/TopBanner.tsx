@@ -3,7 +3,7 @@ import Image from "next/image";
 function TopBanner() {
   return (
     <div className='flex space-x-2'>
-      <div className='relative flex-1'>
+      <div className='hidden md:inline-block relative flex-1'>
         <img
           src='/assests/banner-6.jpg'
           alt=''
@@ -20,13 +20,13 @@ function TopBanner() {
           </button>
         </div>
       </div>
-      <div className='relative'>
+      <div className='relative w-screen md:w-auto'>
         <img
           src='/assests/banner5.jpg'
           alt=''
           width={800}
           height={800}
-          className='w-full h-64 rounded-2xl'
+          className='w-full h-64 rounded-2xl object-cover'
         />
         <div className='absolute bottom-2 flex items-center justify-center w-full'>
           <button className='bg-red-800 px-3 py-2 text-sm w-24 mt-7 text-white rounded-full'>
