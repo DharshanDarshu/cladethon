@@ -3,36 +3,36 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import React from "react";
 
-async function Success() {
+function Success() {
   const nextCookies = cookies();
   const token = nextCookies.get("user");
   const user = token && JSON.parse(token?.value);
   console.log(user);
   if (user) {
-    const cartRes = await fetch(
-      `http://localhost:4000/carts/${user.email}`,
-    );
+    fetch(`http://localhost:4000/carts/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        data.carts.map((cart: any) => {
+          fetch("http://localhost:4000/orders", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: user.email,
+              product: cart,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => console.log(data));
+        });
+      });
 
-    const cart = await cartRes.json();
+    // const cart = await cartRes.json();
 
-    console.log(cart.carts);
+    // console.log(cart.carts);
 
-    cart.carts.map((cart: any) => {
-      fetch("http://localhost:4000/orders", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user.email,
-          product: cart,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => console.log(data));
-    });
-
-    await fetch("http://localhost:4000/carts/empty", {
+    fetch("http://localhost:4000/carts/empty", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

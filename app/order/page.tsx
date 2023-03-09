@@ -7,7 +7,7 @@ async function OrderPage() {
   const cookie = newCookies.get("user");
   const user = cookie && JSON.parse(cookie?.value);
   const orderRes = await fetch(
-    `http://localhost:4000/orders/${user.email}`,
+    `${process.env.RESTFUL_API}/orders/${user.email}`,
   );
 
   const orders = await orderRes.json();

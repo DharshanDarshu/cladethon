@@ -10,7 +10,6 @@ async function HomePage() {
   const response = await fetch(
     `${process.env.RESTFUL_API}/category`,
   );
-  console.log(`${process.env.RESTFUL_API}/category`);
   const productResponse = await fetch(
     `${process.env.RESTFUL_API}/products`,
   );
