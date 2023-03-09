@@ -1,12 +1,13 @@
 import Signup from "../../../components/Auth/Signup";
 
-type Props = {
-  searchParams: {
-    email: string;
-  };
-};
+// type Props = {
+//   searchParams: {
+//     email: string;
+//   };
+// };
 
-function SignUp({ searchParams: { email } }: Props) {
+function SignUp(props: any) {
+  const email = props.searchParams.email || "";
   console.log(email);
   return (
     <div>
