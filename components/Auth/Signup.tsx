@@ -5,12 +5,11 @@ import { FormEvent, useState } from "react";
 import { useCookies } from "react-cookie";
 
 type Props = {
-  email: string;
+  email: string | undefined;
 };
 
 function Signup({ email }: Props) {
-  console.log(atob(email));
-  const decryptedEmail = atob(email);
+  const decryptedEmail = atob(email || "");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState<number | undefined>();
