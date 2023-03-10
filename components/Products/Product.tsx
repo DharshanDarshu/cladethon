@@ -1,6 +1,6 @@
 type Props = {
   product: {
-    id: number;
+    _id: number;
     title: string;
     price: number;
     description: string;

@@ -3,7 +3,7 @@ import Product from "./Product";
 type Props = {
   products: [
     {
-      id: number;
+      _id: number;
       title: string;
       price: number;
       description: string;
@@ -23,7 +23,7 @@ function Products({ products }: Props) {
       <div className='grid grid-cols-4 gap-y-20 gap-x-4'>
         {products.map((product) => (
           <Product
-            key={product.id}
+            key={product._id}
             product={product}
           />
         ))}
