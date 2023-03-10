@@ -121,7 +121,7 @@ function Cart({
         <img
           src={`${process.env.RESTFUL_API}/image/${image}`}
           alt=''
-          className='w-full h-full'
+          className='w-full h-full object-cover object-top'
         />
       </div>
       <div className='flex-1 flex flex-col'>

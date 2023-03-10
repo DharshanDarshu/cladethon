@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useCookies } from "react-cookie";
+import { toast } from "react-hot-toast";
 
 type Props = {
   user: {
@@ -14,6 +15,7 @@ function Login({ user }: Props) {
   console.log(user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
   const [cookie, setCookie] = useCookies([
     "user",
     "access_token",
@@ -21,10 +23,36 @@ function Login({ user }: Props) {
   ]);
   const router = useRouter();
 
+  const handleChangeEmail = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    setErr("");
+    setEmail(e.target.value);
+  };
+
+  const handleChangePassword = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    setErr("");
+    setPassword(e.target.value);
+  };
+
   const handleLogin = async (
     e: FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
+
+    if (!email) {
+      return;
+    }
+
+    if (!password) {
+      return;
+    }
+
+    const notification = toast.loading(
+      "Please wait, we are login in",
+    );
 
     const authorization = await fetch(
       "http://localhost:3000/api/login",
@@ -42,30 +70,42 @@ function Login({ user }: Props) {
 
     // console.log(authorization);
     const authData = await authorization.json();
+    console.log(authData);
 
-    setCookie("user", JSON.stringify(authData.user), {
-      path: "/",
-      maxAge: 3600, // Expires after 1hr
-      sameSite: true,
-    });
-    setCookie(
-      "access_token",
-      JSON.stringify(authData.accessToken),
-      {
+    if (authData.user) {
+      setCookie("user", JSON.stringify(authData.user), {
         path: "/",
         maxAge: 3600, // Expires after 1hr
         sameSite: true,
-      },
-    );
-    setCookie(
-      "refresh_token",
-      JSON.stringify(authData.refreshToken),
-      {
-        path: "/",
-        maxAge: 3600, // Expires after 1hr
-        sameSite: true,
-      },
-    );
+      });
+      setCookie(
+        "access_token",
+        JSON.stringify(authData.accessToken),
+        {
+          path: "/",
+          maxAge: 3600, // Expires after 1hr
+          sameSite: true,
+        },
+      );
+      setCookie(
+        "refresh_token",
+        JSON.stringify(authData.refreshToken),
+        {
+          path: "/",
+          maxAge: 3600, // Expires after 1hr
+          sameSite: true,
+        },
+      );
+      toast.success("verification successful", {
+        id: notification,
+      });
+    } else {
+      setErr("invalid email or password");
+      toast.error("invalid email or password", {
+        id: notification,
+      });
+      return;
+    }
 
     router.replace("/");
   };
@@ -90,6 +130,11 @@ function Login({ user }: Props) {
               <h1 className='text-2xl font-semibold uppercase mb-4 text-center '>
                 Login
               </h1>
+              {err && (
+                <p className='text-center text-red-500 -mt-5'>
+                  {err}
+                </p>
+              )}
               <div className='flex flex-col'>
                 <label
                   htmlFor=''
@@ -100,9 +145,9 @@ function Login({ user }: Props) {
                   type='email'
                   name=''
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleChangeEmail}
                   id=''
-                  className='border mt-[6px] mb-[10px] p-1 outline-none'
+                  className='border mt-[6px] mb-[10px] px-2 py-[5px] outline-none text-sm'
                   placeholder='Enter email'
                 />
               </div>
@@ -117,16 +162,15 @@ function Login({ user }: Props) {
                   name=''
                   id=''
                   value={password}
-                  onChange={(e) =>
-                    setPassword(e.target.value)
-                  }
-                  className='border mt-[6px] mb-[10px] p-1 outline-none'
+                  onChange={handleChangePassword}
+                  className='border mt-[6px] mb-[10px] px-2 py-[5px] outline-none text-sm'
                   placeholder='Enter Password'
                 />
               </div>
               <button
                 type='submit'
-                className='bg-green-800 px-6 py-1 mt-3 text-white'>
+                disabled={!email || !password}
+                className='bg-green-800 px-6 py-1 mt-3 text-white disabled:bg-gray-400 disabled:cursor-not-allowed'>
                 Login
               </button>
             </form>

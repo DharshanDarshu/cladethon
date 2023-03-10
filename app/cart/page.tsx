@@ -12,19 +12,21 @@ async function CartPage() {
 
   if (user) {
     const cartsResponse = await fetch(
-      `${process.env.RESTFUL_API}/carts/${user.email}`,
+      `http://localhost:4000/carts/${user.email}`,
       { cache: "no-store" },
     );
 
     carts = await cartsResponse.json();
   }
 
+  console.log(carts);
+
   return (
     <div className=''>
       {user ? (
         <Carts
-          carts={carts.carts}
-          email={carts.email}
+          carts={carts?.carts}
+          email={carts?.email}
         />
       ) : (
         <CartWithOutLogin />

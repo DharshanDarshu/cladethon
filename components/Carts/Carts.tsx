@@ -20,9 +20,11 @@ type Props = {
 
 function Carts({ carts, email }: Props) {
   let totalAmount = 0;
-  carts.map((cart) => {
-    return (totalAmount += cart.price * cart.items);
-  });
+  if (carts) {
+    carts.map((cart) => {
+      return (totalAmount += cart.price * cart.items);
+    });
+  }
   const [changeItems, setChangeItems] = useState<
     number | undefined
   >();
@@ -81,7 +83,7 @@ function Carts({ carts, email }: Props) {
 
   return (
     <div className='flex flex-col-reverse md:flex-row md:space-x-2 mt-2 lg:mt-12'>
-      {newCart.length ? (
+      {newCart?.length ? (
         <>
           <div className='flex-1'>
             {newCart.map(

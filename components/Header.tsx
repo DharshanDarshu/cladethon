@@ -38,12 +38,14 @@ function Header() {
         />
       </form>
       <div className='flex items-center space-x-3 md:space-x-6 lg:ml-12'>
-        <div className='hidden md:inline-flex flex-col items-center cursor-pointer'>
+        <Link
+          href='/profile'
+          className='hidden md:inline-flex flex-col items-center cursor-pointer'>
           <UserCircleIcon className='w-4 h-4 md:w-5 md:h-5' />
           <p className='text-xs font-semibold md:font-bold'>
             Profile
           </p>
-        </div>
+        </Link>
         <div className='hidden md:inline-flex flex-col items-center'>
           <HeartIcon className='w-4 h-4 md:w-5 md:h-5' />
           <p className='text-xs font-semibold md:font-bold'>

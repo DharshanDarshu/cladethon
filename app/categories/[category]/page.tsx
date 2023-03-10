@@ -15,7 +15,7 @@ async function CategoryPage({
   );
 
   const productResponse = await fetch(
-    `${process.env.RESTFUL_API}/products?category=${category}`,
+    `${process.env.RESTFUL_API}/products?category=${category}s`,
   );
 
   const products = await productResponse.json();
