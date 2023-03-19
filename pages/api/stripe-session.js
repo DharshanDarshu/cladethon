@@ -18,7 +18,7 @@ async function CreateStripeSession(req, res) {
         currency: "inr",
         product_data: {
           images: [
-            `http://localhost:4000/image/${item.image}`,
+            `${process.env.RESTFUL_API}/image/${item.image}`,
           ],
           name: item.title,
         },
@@ -38,7 +38,7 @@ async function CreateStripeSession(req, res) {
     success_url: redirectURL + "?status=success",
     cancel_url: redirectURL + "?status=cancel",
     metadata: {
-      images: `http://localhost:4000/image/${item.image}`,
+      images: `${process.env.RESTFUL_API}/image/${item.image}`,
     },
     shipping_address_collection: {
       allowed_countries: ["IN"],

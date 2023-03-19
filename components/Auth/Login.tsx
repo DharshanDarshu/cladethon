@@ -53,7 +53,7 @@ function Login({ user }: Props) {
     );
 
     const authorization = await fetch(
-      "http://localhost:3000/api/login",
+      "https://cladethon.vercel.app/api/login",
       {
         method: "POST",
         headers: {
