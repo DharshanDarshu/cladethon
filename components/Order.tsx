@@ -7,10 +7,12 @@ type Props = {
     price: string;
     productId: string;
     items: number;
+    order_date: string;
   };
 };
 
 function Order({ order }: Props) {
+  console.log(order.order_date);
   return (
     <div className='border-b flex space-x-6 py-2 px-6'>
       <img
@@ -22,8 +24,11 @@ function Order({ order }: Props) {
         <h2 className='capitalize text-2xl text-gray-900'>
           {order.title}
         </h2>
-        <p className='flex-1 text-sm text-gray-600 mt-1'>
+        <p className='text-sm text-gray-600 mt-1'>
           Price: Rs {order.price}
+        </p>
+        <p className='flex-1 text-sm text-gray-600'>
+          Order Date: {order.order_date.split("T")[0]}
         </p>
         <h3 className='text-xl'>
           Total:{" "}

@@ -17,6 +17,7 @@ function Signup({ email }: Props) {
   // const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [state, setState] = useState("");
+  const [err, setErr] = useState("");
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
   const [zipcode, setZipCode] = useState<
@@ -28,6 +29,8 @@ function Signup({ email }: Props) {
     "access_token",
     "refresh_token",
   ]);
+  const restApi =
+    "https://cladethon-hosted-service.vercel.app";
   useEffect(() => {
     if (!email) {
       router.replace("/auth/signup/verifyemail");
@@ -38,6 +41,20 @@ function Signup({ email }: Props) {
     e: FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
+
+    if (
+      !firstName ||
+      !lastName ||
+      !phone ||
+      !password ||
+      !state ||
+      !city ||
+      !street ||
+      !zipcode
+    ) {
+      setErr("please enter all the input fields");
+      return;
+    }
 
     const formdata = {
       firstname: firstName,
@@ -58,7 +75,7 @@ function Signup({ email }: Props) {
     );
 
     const authorization = await fetch(
-      `http://localhost:4000/user/signup`,
+      `${restApi}/user/signup`,
       {
         method: "POST",
         headers: {
@@ -70,29 +87,39 @@ function Signup({ email }: Props) {
 
     const authData = await authorization.json();
     console.log(authData);
+    if (authData.err) {
+      setErr(authData.err);
+    }
 
     if (authorization.status === 200) {
       toast.success("verification successful", {
         id: notification,
       });
 
-      const cartResponse = await fetch(
-        `http://localhost:4000/carts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: decryptedEmail,
-          }),
+      const cartResponse = await fetch(`${restApi}/carts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          email: decryptedEmail,
+        }),
+      });
 
       const cart = await cartResponse.json();
 
-      const orderRes = await fetch(
-        `http://localhost:4000/orders`,
+      const orderRes = await fetch(`${restApi}/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: decryptedEmail,
+        }),
+      });
+
+      const wishListRes = await fetch(
+        `${restApi}/wishlist`,
         {
           method: "POST",
           headers: {
@@ -123,7 +150,7 @@ function Signup({ email }: Props) {
         JSON.stringify(authData.refreshToken),
         {
           path: "/",
-          maxAge: 3600, // Expires after 1hr
+          maxAge: 3600 * 24, // Expires after 1hr
           sameSite: true,
         },
       );
@@ -151,6 +178,11 @@ function Signup({ email }: Props) {
             <h1 className='text-2xl font-semibold uppercase mb-4 text-center '>
               Sign Up
             </h1>
+            {err && (
+              <p className='text-red-500 text-center -mt-5 mb-2'>
+                {err}
+              </p>
+            )}
             <div className='flex space-x-2 w-full'>
               <div className='flex flex-col w-full'>
                 <label

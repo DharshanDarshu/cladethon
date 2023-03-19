@@ -26,7 +26,6 @@ function SliderComponent() {
     "/assests/myntra3.jpg",
     "/assests/myntra4.jpg",
     "/assests/myntra5.jpg",
-    // "/assests/myntra6.jpg",
     "/assests/myntra7.jpg",
     "/assests/myntra8.jpg",
     "/assests/myntra9.jpg",
@@ -36,9 +35,11 @@ function SliderComponent() {
     <Slider {...settings}>
       {bannerArray.map((banner) => (
         <div key={banner}>
-          <img
+          <Image
             src={banner}
             className='w-full'
+            priority
+            unoptimized={true}
             width={800}
             height={800}
             alt=''

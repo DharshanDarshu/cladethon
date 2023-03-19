@@ -1,11 +1,24 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
 import { toast } from "react-hot-toast";
 import { useStopwatch } from "react-timer-hook";
 
-function Verify() {
+type Props = {
+  profile: string | null;
+  token: string | null;
+  forgetten: string | null;
+};
+
+function Verify({ profile, token, forgetten }: Props) {
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "access_token",
+    "user",
+  ]);
+
   const [email, setEmail] = useState("");
   const [createdOTP, setCreatedOTP] = useState<any>();
   const [otp, setOtp] = useState("");
@@ -14,6 +27,9 @@ function Verify() {
   const { seconds, minutes, start, pause } = useStopwatch({
     autoStart: false,
   });
+
+  const restApi =
+    "https://cladethon-hosted-service.vercel.app";
 
   useEffect(() => {
     if (minutes >= 5) {
@@ -35,7 +51,7 @@ function Verify() {
       "Please wait, you account is in verification mode",
     );
     const response = await fetch(
-      `http://localhost:4000/verifyemail/${createdOTP._id}`,
+      `${restApi}/verifyemail/${createdOTP._id}`,
     );
 
     const data = await response.json();
@@ -51,6 +67,96 @@ function Verify() {
       id: notification,
     });
 
+    if (profile) {
+      let emailNotification: any;
+      setTimeout(() => {
+        emailNotification = toast.loading(
+          "Please wait, email is getting updating",
+        );
+      }, 2000);
+      const responseUser = await fetch(
+        `${restApi}/user/change-email`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            email,
+          }),
+        },
+      );
+      const responseCart = await fetch(
+        `${restApi}/carts/email`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            email,
+          }),
+        },
+      );
+      const responseOrder = await fetch(
+        `${restApi}/orders/email`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            email,
+          }),
+        },
+      );
+      const responseWishlist = await fetch(
+        `${restApi}/wishlist/email`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            email,
+          }),
+        },
+      );
+
+      const data1 = await responseUser.json();
+      const data2 = await responseCart.json();
+      const data3 = await responseOrder.json();
+      const data4 = await responseWishlist.json();
+      console.log(data1);
+      console.log(data2);
+      console.log(data3);
+      console.log(data4);
+      setTimeout(() => {
+        toast.success("email updated Successfully", {
+          id: emailNotification,
+        });
+        removeCookie("access_token");
+        console.log("remove");
+        removeCookie("user");
+        localStorage.removeItem("token");
+      }, 4000);
+
+      setTimeout(() => {
+        router.replace("/auth/login");
+      }, 5000);
+
+      return;
+    }
+
+    if (forgetten) {
+      router.replace("/auth/forgetten-password/reset");
+      return;
+    }
+
     router.replace(`/auth/signup?email=${btoa(email)}`);
   };
 
@@ -62,25 +168,21 @@ function Verify() {
       setErr("enter email address");
       return;
     }
-    console.log(`${process.env.RESTFUL_API}/verifyemail`);
-    const response = await fetch(
-      `http://localhost:4000/verifyemail`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-        }),
+    const response = await fetch(`${restApi}/verifyemail`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        email,
+      }),
+    });
     const data = await response.json();
+    console.log(data);
 
     if (data.err) {
       return setErr(data.err);
     }
-    console.log(data);
     start();
     setCreatedOTP(data);
   };
@@ -179,10 +281,20 @@ function Verify() {
                 </p>
               )}
 
-              <button className='bg-green-800 px-6 py-1 mt-3 text-white'>
+              <button className='bg-green-800 px-6 py-1 mt-2 text-white'>
                 Verify
               </button>
             </form>
+          )}
+          {!profile && (
+            <p className='mt-2 text-sm'>
+              Already have an account?
+              <Link
+                href='/auth/login'
+                className='text-blue-600 underline ml-1 text-[15px]'>
+                login
+              </Link>
+            </p>
           )}
         </div>
       </div>

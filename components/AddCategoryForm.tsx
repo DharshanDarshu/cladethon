@@ -18,6 +18,9 @@ function AddCategoryForm() {
   const categoryImageRef = useRef<any>(null);
   const imageRef = useRef<any>(null);
 
+  const restApi =
+    "https://cladethon-hosted-service.vercel.app";
+
   const handleChangeCategoryImage = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -75,24 +78,21 @@ function AddCategoryForm() {
       };
 
       const imageResponse = await axios.post(
-        `${process.env.RESTFUL_API}/upload`,
+        `${restApi}/upload`,
         formData,
         config,
       );
 
-      const response = await fetch(
-        `${process.env.RESTFUL_API}/category`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            category,
-            image: imageResponse.data?.filename,
-          }),
+      const response = await fetch(`${restApi}/category`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          category,
+          image: imageResponse.data?.filename,
+        }),
+      });
 
       const data = await response.json();
       console.log(data);
@@ -132,7 +132,7 @@ function AddCategoryForm() {
       };
 
       const imageResponse = await axios.post(
-        `${process.env.RESTFUL_API}/upload`,
+        `${restApi}/upload`,
         formData,
         config,
       );
@@ -143,7 +143,7 @@ function AddCategoryForm() {
       }
 
       const response = await fetch(
-        `${process.env.RESTFUL_API}/category/${id}`,
+        `${restApi}/category/${id}`,
         {
           method: "PATCH",
           headers: {

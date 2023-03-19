@@ -5,6 +5,10 @@ module.exports = {
     appDir: true,
   },
   images: {
-    domains: ["assets.myntassets.com"],
+    domains: [
+      "assets.myntassets.com",
+      "localhost",
+      "cladethon-hosted-service.vercel.app",
+    ],
   },
 };

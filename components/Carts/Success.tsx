@@ -8,12 +8,14 @@ function Success() {
   const token = nextCookies.get("user");
   const user = token && JSON.parse(token?.value);
   console.log(user);
+  const restApi =
+    "https://cladethon-hosted-service.vercel.app";
   if (user) {
-    fetch(`http://localhost:4000/carts/${user.email}`)
+    fetch(`${restApi}/carts/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         data.carts.map((cart: any) => {
-          fetch("http://localhost:4000/orders", {
+          fetch(`${restApi}/orders`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
@@ -32,7 +34,7 @@ function Success() {
 
     // console.log(cart.carts);
 
-    fetch("http://localhost:4000/carts/empty", {
+    fetch(`${restApi}/carts/empty`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -49,6 +51,7 @@ function Success() {
     <>
       {user && (
         <div className='shadow-lg w-[400px] flex px-6 flex-col items-center justify-center py-4 bg-gray-100/30'>
+          {/* <Client /> */}
           <CheckIcon className='w-12 h-12 bg-green-600 text-white rounded-full p-2' />
           <p className='font-semibold text-gray-900'>
             Your Order Successfully Placed
@@ -58,7 +61,7 @@ function Success() {
             <p className=''>{`email: ${user?.email}`}</p>
             <p className='text-center text-gray-700 text-sm'>
               Shipping Address:{" "}
-              <span>{`${user?.billingAddress?.street}, ${user?.billingAddress?.city}, ${user?.billingAddress?.state} pincode: ${user?.billingAddress?.zipcode}`}</span>
+              <span>{`${user?.shippingAddress?.street}, ${user?.shippingAddress?.city}, ${user?.shippingAddress?.state} pincode: ${user?.shippingAddress?.zipcode}`}</span>
             </p>
           </div>
           <Link

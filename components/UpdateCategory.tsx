@@ -16,7 +16,8 @@ function UpdateCategory({ id }: Props) {
     [],
   );
   const imageRef = useRef<any>(null);
-
+  const restApi =
+    "https://cladethon-hosted-service.vercel.app";
   const handleChangeImage = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -61,7 +62,7 @@ function UpdateCategory({ id }: Props) {
       };
 
       const imageResponse = await axios.post(
-        "http://localhost:4000/upload",
+        `${restApi}/upload`,
         formData,
         config,
       );
@@ -72,7 +73,7 @@ function UpdateCategory({ id }: Props) {
       }
 
       const response = await fetch(
-        `http://localhost:4000/category/${id}`,
+        `${restApi}/category/${id}`,
         {
           method: "PATCH",
           headers: {

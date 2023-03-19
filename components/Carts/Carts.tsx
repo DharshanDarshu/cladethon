@@ -1,27 +1,34 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import Cart from "./Cart";
 import NoItem from "./NoItem";
 import TotalAmount from "./TotalAmount";
+import useSWR from "swr";
+import { useRouter } from "next/navigation";
 
 type Props = {
-  email: string;
-  carts: [
-    {
-      _id: string;
-      title: string;
-      productId: string;
-      image: string;
-      price: number;
-      items: number;
-    },
-  ];
+  token: string;
 };
 
-function Carts({ carts, email }: Props) {
+const restApi =
+  "https://cladethon-hosted-service.vercel.app";
+
+const fetcher = (token: any) =>
+  fetch(`${restApi}/carts/`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  }).then((response) => response.json());
+
+function Carts({ token }: Props) {
+  const cartsDetails = useSWR(token, fetcher);
+  const carts = cartsDetails?.data?.carts;
+  const email = cartsDetails?.data?.email;
+  console.log(carts);
   let totalAmount = 0;
   if (carts) {
-    carts.map((cart) => {
+    carts.map((cart: any) => {
       return (totalAmount += cart.price * cart.items);
     });
   }
@@ -34,7 +41,17 @@ function Carts({ carts, email }: Props) {
   const [addition, setAddition] = useState<
     boolean | undefined
   >();
-  const [newCart, setNewCart] = useState<any>(carts);
+  const [newCart, setNewCart] = useState<any>(
+    cartsDetails.data?.carts,
+  );
+  const router = useRouter();
+
+  useEffect(() => {
+    setTotal(totalAmount);
+    setNewCart(cartsDetails.data?.carts);
+  }, [cartsDetails.data?.carts]);
+
+  console.log(total);
 
   useEffect(() => {
     if (index >= 0 && changeItems) {
@@ -47,6 +64,7 @@ function Carts({ carts, email }: Props) {
       }
     }
   }, [changeItems, index]);
+  console.log(newCart);
 
   useEffect(() => {
     if (removeId) {
@@ -55,12 +73,15 @@ function Carts({ carts, email }: Props) {
       );
 
       let totalAmount = 0;
+      console.log(cart);
 
       const total = cart.map((cart: any) => {
-        return (totalAmount += cart.price * cart.items);
+        return (totalAmount += +cart.price * cart.items);
       });
 
-      setTotal(total);
+      console.log(total);
+
+      setTotal(total[total.length - 1]);
 
       setNewCart(cart);
     }
@@ -100,6 +121,7 @@ function Carts({ carts, email }: Props) {
               ): any => (
                 <Cart
                   key={_id}
+                  token={token}
                   image={image}
                   title={title}
                   items={items}

@@ -1,8 +1,9 @@
-import { HeartIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { use } from "react";
 import AddToCart from "./AddToCart";
+import AddWishList from "./AddWishList";
 
 type Props = {
   product: {
@@ -12,16 +13,36 @@ type Props = {
     description: string;
     price: number;
     brand: string;
+    offer_details: string;
   };
+};
+
+const getWishlist = async (token: string) => {
+  const response = await fetch(
+    `${process.env.RESTFUL_API}/wishlist`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    },
+  );
+
+  const data = await response.json();
+  return data.wishlists;
 };
 
 function SingleProduct({ product }: Props) {
   const nextCookies = cookies();
-  const token = nextCookies.get("user");
-  const user = token && JSON.parse(token?.value);
+  const accesstoken = nextCookies.get("access_token");
+  const user =
+    accesstoken && JSON.parse(accesstoken?.value);
+  const random = +product?.offer_details / 100;
+  const discountPrice = Math.floor(product?.price * random);
+  const discount = product?.offer_details;
+  const wishlists = use(getWishlist(user));
   return (
     <div className='px-4 md:px-8 my-4 lg:my-12 flex flex-col lg:flex-row'>
-      <div>
+      <div className='w-1/2'>
         <img
           className='w-full'
           src={`${process.env.RESTFUL_API}/image/${product.image}`}
@@ -43,24 +64,32 @@ function SingleProduct({ product }: Props) {
           <StarIcon className='w-5 h-5 text-yellow-500' />
         </div>
         <div className='border border-gray-100' />
-        <h2 className='my-2 text-2xl text-gray-700 font-bold'>
-          Rs. {product.price}
-        </h2>
+        <div className='flex items-center space-x-3'>
+          <h2 className='my-2 text-2xl text-gray-700 font-bold'>
+            Rs. {product?.price - discountPrice}
+          </h2>
+          <p className='text-gray-500 text-lg line-through'>
+            MRP Rs. {product?.price}
+          </p>
+          <p className='text-orange-600 text-lg'>{`( ${discount}% OFF )`}</p>
+        </div>
         <div className='flex flex-col md:flex-row justify-between items-center md:space-x-8 md:w-3/4'>
           <AddToCart
             title={product.title}
             productId={product._id}
             image={product.image}
             price={product.price}
-            user={user}
+            token={user}
           />
 
-          <button
-            disabled={!user}
-            className='w-full bg-transparent disabled:cursor-not-allowed disabled:border-black flex items-center justify-center space-x-2 border md:w-3/4 font-semibold uppercase text-sm border-gray-300 hover:border-black rounded-sm px-8 py-3 text-black'>
-            <HeartIcon className='w-6 h-6 text-gray-800' />
-            <span>WishList</span>
-          </button>
+          <AddWishList
+            title={product.title}
+            productId={product._id}
+            image={product.image}
+            price={product.price}
+            token={user}
+            wishlist={wishlists}
+          />
         </div>
         {!user && (
           <p className='text-sm mt-1 md:-mt-[12px] text-gray-700'>

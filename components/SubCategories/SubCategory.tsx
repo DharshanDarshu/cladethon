@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 type Props = {
@@ -7,8 +8,12 @@ type Props = {
 function SubCategory({ image }: Props) {
   return (
     <div className='cursor-pointer'>
-      <img
+      <Image
         src={image}
+        unoptimized={true}
+        className='w-full h-full'
+        width={800}
+        height={800}
         alt=''
       />
     </div>

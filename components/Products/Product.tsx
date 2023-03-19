@@ -17,8 +17,8 @@ function Product({ product }: Props) {
     <div className='w-[280px]'>
       <div className='flex items-center justify-center w-full h-[260px] bg-white-200'>
         <img
-          className='w-[160px] object-contain'
-          src={product.image}
+          className='w-full'
+          src={`http://localhost:4000/image/${product.image}`}
           alt=''
         />
       </div>

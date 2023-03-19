@@ -18,7 +18,10 @@ async function OrderPage() {
         My Order
       </h1>
       {orders.orders.map((order: any) => (
-        <Order order={order} />
+        <Order
+          key={order._id}
+          order={order}
+        />
       ))}
     </div>
   );

@@ -19,6 +19,9 @@ function AddForm() {
   const [description, setDescription] = useState("");
   const imageRef = useRef<any>(null);
 
+  const restApi =
+    "https://cladethon-hosted-service.vercel.app";
+
   const handleChangeImage = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -39,6 +42,7 @@ function AddForm() {
   ) => {
     e.preventDefault();
 
+    console.log(offer);
     if (!file) {
       return;
     }
@@ -55,31 +59,28 @@ function AddForm() {
       };
 
       const response = await axios.post(
-        `${process.env.RESTFUL_API}/upload`,
+        `${restApi}/upload`,
         formData,
         config,
       );
 
       console.log(response);
-      const movie = await fetch(
-        `${process.env.RESTFUL_API}/products`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title,
-            price,
-            description,
-            category,
-            subcategory,
-            image: response.data?.filename,
-            brand,
-            offer_details: offer,
-          }),
+      const movie = await fetch(`${restApi}/products`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          title,
+          price,
+          description,
+          category,
+          subcategory,
+          image: response.data?.filename,
+          brand,
+          offer_details: offer,
+        }),
+      });
 
       const data = await movie.json();
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
@@ -10,10 +11,10 @@ function Category({ category, image, id }: Props) {
   return (
     <div className='relative md:w-[310px]  min-h-[120px] cursor-pointer'>
       <Link href={`/categories/${category}`}>
-        <img
-          // src='/assests/PngItem_3342550.png'
+        <Image
           src={`${process.env.RESTFUL_API}/image/${image}`}
-          alt=''
+          alt={category}
+          // unoptimized={true}
           className='w-full h-full object-cover rounded-xl'
           width={100}
           height={100}

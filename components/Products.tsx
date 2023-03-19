@@ -12,6 +12,7 @@ type Props = {
       category: string;
       subcategory: string;
       image: string;
+      offer_details: string;
     },
   ];
 };
@@ -20,7 +21,14 @@ function Products({ products }: Props) {
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mx-8 my-4 lg:mx-12 lg:my-6'>
       {products.map(
-        ({ image, _id, description, title, price }) => (
+        ({
+          image,
+          _id,
+          description,
+          title,
+          price,
+          offer_details,
+        }) => (
           <Product
             key={_id}
             id={_id}
@@ -28,6 +36,7 @@ function Products({ products }: Props) {
             title={title}
             description={description}
             price={price}
+            offer_details={offer_details}
           />
         ),
       )}

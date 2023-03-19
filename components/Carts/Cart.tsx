@@ -17,6 +17,7 @@ type Props = {
   onChangeItems: Function;
   onRemove: Function;
   index: number;
+  token: string | null;
 };
 
 function Cart({
@@ -30,6 +31,7 @@ function Cart({
   onChangeItems,
   onRemove,
   index,
+  token,
 }: Props) {
   const [noOfItems, setNoOfItems] = useState(items);
   const [disabled, setDisabled] = useState(false);
@@ -47,16 +49,16 @@ function Cart({
       setDisabled(false);
     }
     const response = await fetch(
-      `${process.env.RESTFUL_API}/carts`,
+      `http://localhost:4000/carts`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
           productId,
           image,
-          email,
           price,
           items: 1,
           title,
@@ -77,16 +79,16 @@ function Cart({
     setNoOfItems(noOfItems - 1);
 
     const response = await fetch(
-      `${process.env.RESTFUL_API}/carts?sub=true`,
+      `http://localhost:4000/carts?sub=true`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
           productId,
           image,
-          email,
           price,
           items: 1,
           title,
@@ -101,15 +103,19 @@ function Cart({
 
   const handleRemoveProduct = async () => {
     onRemove(id);
+    const cartItems = localStorage.getItem("cart");
+    if (cartItems) {
+      localStorage.setItem("cart", String(+cartItems - 1));
+    }
     const response = await fetch(
-      `${process.env.RESTFUL_API}/carts/remove`,
+      `http://localhost:4000/carts/remove`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
-          email,
           productId,
         }),
       },
@@ -119,7 +125,7 @@ function Cart({
     <div className='h-[210px] border-b px-4 lg:px-12 pt-2 pb-8 flex space-x-4 md:space-x-8'>
       <div className='max-h-full w-36'>
         <img
-          src={`${process.env.RESTFUL_API}/image/${image}`}
+          src={`http://localhost:4000/image/${image}`}
           alt=''
           className='w-full h-full object-cover object-top'
         />

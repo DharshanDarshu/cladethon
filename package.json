@@ -17,11 +17,14 @@
     "react-cookie": "^4.1.1",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
+    "react-loading": "^2.0.3",
     "react-slick": "^0.29.0",
     "react-timer-hook": "^3.0.5",
     "set-cookie-parser": "^2.5.1",
+    "sharp": "^0.31.3",
     "slick-carousel": "^1.8.1",
-    "stripe": "^11.13.0"
+    "stripe": "^11.13.0",
+    "swr": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "18.11.3",

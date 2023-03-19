@@ -1,13 +1,20 @@
 import Image from "next/image";
 import {
   HeartIcon,
-  MagnifyingGlassIcon,
-  ShoppingBagIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import Bag from "./Bag";
+import { cookies } from "next/headers";
+import Search from "./Search";
 
 function Header() {
+  const nextCookies = cookies();
+  const token = nextCookies.get("user");
+  const accesstoken = nextCookies.get("access_token");
+  const user = token && JSON.parse(token?.value);
+  const accessToken =
+    accesstoken && JSON.parse(accesstoken?.value);
   return (
     <header className='sticky top-0 z-50 bg-white flex px-4 lg:px-8 items-center h-[56px] md:h-16 lg:h-20 shadow-md'>
       <Link href='/'>
@@ -21,45 +28,52 @@ function Header() {
       </Link>
       <nav className='hidden lg:inline-block ml-8 flex-1'>
         <ul className='flex space-x-5 font-bold text-stone-800/90 text-sm'>
-          <li>MEN</li>
-          <li>WOMEN</li>
-          <li>KIDS</li>
-          <li>HOME&LIVING</li>
-          <li>BEAUTY</li>
-          <li>STUDIO</li>
+          <li>
+            <Link href='/categories/mens'>MEN</Link>
+          </li>
+          <li>
+            <Link href='/categories/womens'>WOMEN</Link>
+          </li>
+          <li>
+            <Link href='/categories/kids'>KIDS</Link>
+          </li>
+          <li>
+            <Link href='/categories/electronics'>
+              ELECTRONIC
+            </Link>
+          </li>
+          <li>
+            <Link href='/categories/womens/beauty'>
+              BEAUTY
+            </Link>
+          </li>
+          <li>
+            <Link href='/categories/sports'>SPORTS</Link>
+          </li>
         </ul>
       </nav>
-      <form className='flex items-center bg-gray-100 space-x-1 flex-1 lg:flex-none md:space-x-3 mx-2 lg:mx-0 md:w-[380px] py-2 rounded-sm'>
-        <MagnifyingGlassIcon className='h-4 w-4 ml-1 lg:ml-4 text-gray-800' />
-        <input
-          type='text'
-          className='bg-transparent flex-1 w-full outline-none text-sm'
-          placeholder='Search for products, brands and more'
-        />
-      </form>
+      <Search />
       <div className='flex items-center space-x-3 md:space-x-6 lg:ml-12'>
         <Link
           href='/profile'
           className='hidden md:inline-flex flex-col items-center cursor-pointer'>
           <UserCircleIcon className='w-4 h-4 md:w-5 md:h-5' />
-          <p className='text-xs font-semibold md:font-bold'>
-            Profile
+          <p className='text-xs font-semibold md:font-bold capitalize'>
+            {user ? user.firstname : "Profile"}
           </p>
         </Link>
-        <div className='hidden md:inline-flex flex-col items-center'>
+        <Link
+          href='/wishlist'
+          className='hidden md:inline-flex flex-col items-center'>
           <HeartIcon className='w-4 h-4 md:w-5 md:h-5' />
           <p className='text-xs font-semibold md:font-bold'>
             Wishlist
           </p>
-        </div>
-        <Link
-          href='/cart'
-          className='flex flex-col items-center'>
-          <ShoppingBagIcon className='w-4 h-4 md:w-5 md:h-5' />
-          <p className='text-xs font-semibold md:font-bold'>
-            Bag
-          </p>
         </Link>
+        <Bag
+          user={user}
+          accesstoken={accessToken}
+        />
       </div>
     </header>
   );

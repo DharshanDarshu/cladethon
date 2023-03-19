@@ -15,6 +15,7 @@ type Props = {
 };
 
 function TotalAmount({ totalAmount, carts }: Props) {
+  console.log(totalAmount);
   return (
     <div className='md:w-[400px] px-4 py-2 bg-gray-100 flex flex-col h-[200px] lg:mr-1'>
       <h1 className='text-2xl'>Total Amount</h1>

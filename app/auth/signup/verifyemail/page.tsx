@@ -4,7 +4,11 @@ import Verify from "../../../../components/Auth/Verify";
 function page() {
   return (
     <div>
-      <Verify />
+      <Verify
+        profile={null}
+        token={null}
+        forgetten={null}
+      />
     </div>
   );
 }

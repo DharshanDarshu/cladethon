@@ -40,6 +40,9 @@ async function CreateStripeSession(req, res) {
     metadata: {
       images: `http://localhost:4000/image/${item.image}`,
     },
+    shipping_address_collection: {
+      allowed_countries: ["IN"],
+    },
   });
 
   res.json({ id: session.id });

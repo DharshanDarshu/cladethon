@@ -1,18 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-hot-toast";
 
 type Props = {
-  user: {
-    email: string;
-  };
+  user: string;
 };
 
 function Login({ user }: Props) {
-  console.log(user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
@@ -68,22 +66,21 @@ function Login({ user }: Props) {
       },
     );
 
-    // console.log(authorization);
     const authData = await authorization.json();
-    console.log(authData);
 
     if (authData.user) {
       setCookie("user", JSON.stringify(authData.user), {
         path: "/",
-        maxAge: 3600, // Expires after 1hr
+        maxAge: 3600 * 24, // Expires after 1hr
         sameSite: true,
       });
+      localStorage.setItem("token", authData.accessToken);
       setCookie(
         "access_token",
         JSON.stringify(authData.accessToken),
         {
           path: "/",
-          maxAge: 3600, // Expires after 1hr
+          maxAge: 3600 * 24, // Expires after 1hr
           sameSite: true,
         },
       );
@@ -167,12 +164,27 @@ function Login({ user }: Props) {
                   placeholder='Enter Password'
                 />
               </div>
+              <Link
+                href='/auth/forgetten-password?forgetten=true'
+                className='-mt-2 float-right text-blue-600 hover:underline cursor-pointer'>
+                forgot password?
+              </Link>
               <button
                 type='submit'
                 disabled={!email || !password}
                 className='bg-green-800 px-6 py-1 mt-3 text-white disabled:bg-gray-400 disabled:cursor-not-allowed'>
                 Login
               </button>
+              <div className='border-t flex-col mt-4 border-gray-200 flex items-center justify-center'>
+                <p className='mt-2 text-sm text-gray-600 text-center'>
+                  New to zensar store?
+                </p>
+                <Link
+                  href='/auth/signup/verifyemail'
+                  className='bg-stone-200 rounded-sm mt-2 text-sm border border-gray-600 w-full text-center py-[6px]'>
+                  Create your Zensar Account
+                </Link>
+              </div>
             </form>
           </div>
         </div>

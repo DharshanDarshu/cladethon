@@ -24,7 +24,7 @@ async function HomePage() {
         <Categories categories={categories} />
         <TopBanner />
         <Picks />
-        {/* <Products products={products} /> */}
+        <Products products={products} />
       </div>
       <SubCategories />
       <div className='max-w-[95vw] mx-auto'>
