@@ -2,15 +2,7 @@ import { cookies } from "next/headers";
 import React from "react";
 import Verify from "../../../components/Auth/Verify";
 
-type Props = {
-  searchParams: {
-    profile: string;
-  };
-};
-
-function VerifyEmailPage({
-  searchParams: { profile },
-}: Props) {
+function VerifyEmailPage(props: any) {
   const nextCookies = cookies();
   const accesstoken = nextCookies.get("access_token");
   const accessToken =
@@ -19,7 +11,7 @@ function VerifyEmailPage({
     <div className=''>
       {/* <VerifyEmail /> */}
       <Verify
-        profile={profile}
+        profile={props.searchParams.profile}
         token={accessToken}
         forgetten={null}
       />

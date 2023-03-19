@@ -1,16 +1,7 @@
 import React from "react";
-import Verify from "../../../components/Auth/Verify";
 import VerifyEmail from "../../../components/VerifyEmail";
 
-type Props = {
-  searchParams: {
-    forgetten: string | null;
-  };
-};
-
-function ForgettenPasswordPage({
-  searchParams: { forgetten },
-}: Props) {
+function ForgettenPasswordPage() {
   return (
     <div>
       <VerifyEmail />
