@@ -1,10 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import {
-  CheckIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import React, { useRef, useState } from "react";
 
@@ -19,8 +16,9 @@ function AddForm() {
   const [description, setDescription] = useState("");
   const imageRef = useRef<any>(null);
 
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  // const restApi =
+  //   "https://cladethon-hosted-service.vercel.app";
+  const restApi = "http://localhost:4000";
 
   const handleChangeImage = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -42,7 +40,6 @@ function AddForm() {
   ) => {
     e.preventDefault();
 
-    console.log(offer);
     if (!file) {
       return;
     }

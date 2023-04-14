@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   token: string;
@@ -11,9 +12,11 @@ function ChangePassword({ token }: Props) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] =
     useState("");
+  const router = useRouter();
 
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  const restApi = "http://localhost:4000";
+  // const restApi =
+  //   "https://cladethon-hosted-service.vercel.app";
 
   const handleChangePassword = async (
     e: FormEvent<HTMLFormElement>,
@@ -35,6 +38,10 @@ function ChangePassword({ token }: Props) {
     const data = await response.json();
 
     console.log(data);
+  };
+
+  const handleCancel = () => {
+    router.replace("/profile?edit=true");
   };
   return (
     <div className='flex flex-col px-8 py-8 bg-white max-w-[40vw] space-y-4 mx-auto shadow-md'>
@@ -99,7 +106,9 @@ function ChangePassword({ token }: Props) {
               className='bg-green-700 px-6 py-1 text-white rounded-sm'>
               Save
             </button>
-            <button className='bg-rose-500 px-4 py-1 text-white rounded-sm'>
+            <button
+              onClick={handleCancel}
+              className='bg-rose-500 px-4 py-1 text-white rounded-sm'>
               Cancel
             </button>
           </div>

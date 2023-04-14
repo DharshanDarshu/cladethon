@@ -21,14 +21,15 @@ function AddWishList({
   price,
   wishlist,
 }: Props) {
-  const index = wishlist.findIndex(
+  const index = wishlist?.findIndex(
     (list: any) => list.productId === productId,
   );
   const [add, setAdd] = useState(
     index === -1 ? false : true,
   );
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  // const restApi =
+  //   "https://cladethon-hosted-service.vercel.app";
+  const restApi = "http://localhost:4000";
   const handleAddWishlist = async () => {
     const updatedData = {
       title,
@@ -51,6 +52,8 @@ function AddWishList({
       setAdd(true);
     }
   };
+
+  console.log(add);
 
   const removeWishlist = async () => {
     if (!add) {
@@ -78,12 +81,14 @@ function AddWishList({
       disabled={!token}
       onClick={!add ? handleAddWishlist : removeWishlist}
       className={`w-full bg-transparent disabled:cursor-not-allowed disabled:border-black flex items-center justify-center space-x-2 border md:w-3/4 font-semibold uppercase text-sm border-gray-300 ${
-        add ? "hover:border-rose-500" : "hover:border-black"
+        add && token
+          ? "hover:border-rose-500"
+          : "hover:border-black"
       } rounded-sm px-8 py-3 text-black`}>
-      {add ? <RedWishList /> : <BlackWishList />}
+      {add && token ? <RedWishList /> : <BlackWishList />}
       <span
         className={`${
-          add ? "text-rose-500" : "text-black"
+          add && token ? "text-rose-500" : "text-black"
         }`}>
         WishList
       </span>

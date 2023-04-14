@@ -14,7 +14,7 @@ function Category({ category, image, id }: Props) {
         <Image
           src={`${process.env.RESTFUL_API}/image/${image}`}
           alt={category}
-          // unoptimized={true}
+          unoptimized={true}
           className='w-full h-full object-cover rounded-xl'
           width={100}
           height={100}

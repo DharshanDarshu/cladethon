@@ -1,7 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FormEvent, useState, useEffect } from "react";
+import {
+  FormEvent,
+  useState,
+  useEffect,
+  ChangeEvent,
+} from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-hot-toast";
 
@@ -13,7 +18,9 @@ function Signup({ email }: Props) {
   const decryptedEmail = atob(email || "");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState<number | undefined>();
+  const [phone, setPhone] = useState<
+    number | undefined | string
+  >("");
   // const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [state, setState] = useState("");
@@ -21,16 +28,17 @@ function Signup({ email }: Props) {
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
   const [zipcode, setZipCode] = useState<
-    number | undefined
-  >();
+    number | undefined | string
+  >("");
   const router = useRouter();
   const [cookie, setCookie] = useCookies([
     "user",
     "access_token",
     "refresh_token",
   ]);
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  // const restApi =
+  //   "https://cladethon-hosted-service.vercel.app";
+  const restApi = "http://localhost:4000";
   useEffect(() => {
     if (!email) {
       router.replace("/auth/signup/verifyemail");
@@ -41,7 +49,7 @@ function Signup({ email }: Props) {
     e: FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
-
+    setErr("");
     if (
       !firstName ||
       !lastName ||
@@ -54,6 +62,17 @@ function Signup({ email }: Props) {
     ) {
       setErr("please enter all the input fields");
       return;
+    }
+
+    const validePhone = phone.toString().length;
+    const valideZipcode = zipcode.toString().length;
+
+    if (validePhone !== 10) {
+      return setErr("please enter valid phone number");
+    }
+
+    if (valideZipcode !== 6) {
+      return setErr("please enter valid zip code");
     }
 
     const formdata = {
@@ -131,37 +150,35 @@ function Signup({ email }: Props) {
         },
       );
 
-      setCookie("user", JSON.stringify(authData.user), {
-        path: "/",
-        maxAge: 3600, // Expires after 1hr
-        sameSite: true,
-      });
-      setCookie(
-        "access_token",
-        JSON.stringify(authData.accessToken),
-        {
-          path: "/",
-          maxAge: 3600, // Expires after 1hr
-          sameSite: true,
-        },
-      );
-      setCookie(
-        "refresh_token",
-        JSON.stringify(authData.refreshToken),
-        {
-          path: "/",
-          maxAge: 3600 * 24, // Expires after 1hr
-          sameSite: true,
-        },
-      );
-
+      const wishlist = await wishListRes.json();
+      console.log(wishlist);
       const order = await orderRes.json();
-      router.replace("/");
+      router.replace("/auth/login");
       return;
     }
     toast.error("something went", {
       id: notification,
     });
+  };
+
+  const handlePhoneChange = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (!e.target.value.length) {
+      setPhone("");
+      return;
+    }
+    setPhone(+e.target.value);
+  };
+
+  const handleZipCodeChange = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (!e.target.value.length) {
+      setZipCode("");
+      return;
+    }
+    setZipCode(+e.target.value);
   };
   return (
     <div className='overflow-hidden h-[calc(100vh-80px)]'>
@@ -247,7 +264,7 @@ function Signup({ email }: Props) {
                 type='number'
                 name=''
                 value={phone}
-                onChange={(e) => setPhone(+e.target.value)}
+                onChange={handlePhoneChange}
                 id='phone'
                 className='border mt-[6px] mb-[10px] px-2 py-[5px] outline-none text-sm'
                 placeholder='Enter Phone Number'
@@ -333,9 +350,7 @@ function Signup({ email }: Props) {
                   name=''
                   id='zipcode'
                   value={zipcode}
-                  onChange={(e) =>
-                    setZipCode(+e.target.value)
-                  }
+                  onChange={handleZipCodeChange}
                   className='border mt-[6px] mb-[10px] w-full px-2 py-[5px] outline-none text-sm'
                   placeholder='Enter Zipcode'
                 />

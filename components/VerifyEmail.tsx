@@ -15,8 +15,9 @@ function VerifyEmail() {
     autoStart: false,
   });
   const router = useRouter();
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  // const restApi =
+  //   "https://cladethon-hosted-service.vercel.app";
+  const restApi = "http://localhost:4000";
 
   useEffect(() => {
     if (minutes >= 5) {

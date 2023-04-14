@@ -12,14 +12,28 @@ function ResetPassword({ email }: Props) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] =
     useState("");
+  const [err, setErr] = useState("");
   const router = useRouter();
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  const restApi = "http://localhost:4000";
+  // const restApi =
+  //   "https://cladethon-hosted-service.vercel.app";
 
   const handleResetPassword = async (
     e: FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
+
+    if (!newPassword || !confirmPassword) {
+      setErr("please enter new and confirm password");
+      return;
+    }
+
+    console.log(newPassword, confirmPassword);
+
+    if (newPassword !== confirmPassword) {
+      setErr("password mismatch");
+      return;
+    }
 
     const notification = toast.loading(
       "Please wait, password is resetting",
@@ -40,19 +54,27 @@ function ResetPassword({ email }: Props) {
       },
     );
 
-    toast.success("password resetted successful", {
-      id: notification,
-    });
+    if (response.status === 200) {
+      toast.success("password resetted successful", {
+        id: notification,
+      });
+      router.replace("/auth/login");
+      return;
+    }
 
     const data = await response.json();
+    setErr(data.err);
+    toast.error("something went wrong", {
+      id: notification,
+    });
     console.log(data);
-    router.replace("/auth/login");
   };
   return (
     <div className='flex flex-col bg-white max-w-[35vw] space-y-4 py-4 mx-auto shadow-md px-10'>
       <h1 className='text-2xl text-gray-700 mt-4'>
         Reset Password
       </h1>
+      {err && <p className='text-red-500 text-sm'>{err}</p>}
       <form
         className='flex flex-col justify-between space-y-2'
         onSubmit={handleResetPassword}>

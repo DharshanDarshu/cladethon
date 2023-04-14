@@ -42,13 +42,27 @@ function EditProfile({ user, token }: Props) {
     user.shippingAddress.zipcode,
   );
   const router = useRouter();
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  const restApi = "http://localhost:4000";
+  // const restApi =
+  //   "https://cladethon-hosted-service.vercel.app";
 
   const handleEdit = async (
     e: FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
+
+    if (
+      firstname ||
+      lastname ||
+      phone ||
+      state ||
+      city ||
+      street ||
+      zipcode
+    ) {
+      console.log("please enter all the value");
+      return;
+    }
 
     const updatedata = {
       firstname,
@@ -88,7 +102,7 @@ function EditProfile({ user, token }: Props) {
         <h1 className='text-2xl text-gray-700 mt-4'>
           Edit Profile
         </h1>
-        <div>
+        <div className='flex flex-col'>
           <Link
             href='/profile/verifyemail?profile=true'
             className='text-sm text-red-400 hover:underline cursor-pointer'>

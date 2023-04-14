@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import WishList from "./WishList";
+import WishListNoItems from "./WishListNoItems";
 
 type Props = {
   token: string;
@@ -20,19 +21,25 @@ function WishLists({ token, wishlist }: Props) {
     setWishlists(data);
   };
   return (
-    <div className='grid grid-cols-5 px-8 my-6'>
-      {wishlists.map((list: any) => (
-        <WishList
-          key={list._id}
-          image={list.image}
-          title={list.title}
-          price={list.price}
-          productId={list.productId}
-          onAddToCart={handleAddToCart}
-          token={token}
-        />
-      ))}
-    </div>
+    <>
+      {wishlists.length ? (
+        <div className='grid grid-cols-5 px-8 my-6'>
+          {wishlists.map((list: any) => (
+            <WishList
+              key={list._id}
+              image={list.image}
+              title={list.title}
+              price={list.price}
+              productId={list.productId}
+              onAddToCart={handleAddToCart}
+              token={token}
+            />
+          ))}
+        </div>
+      ) : (
+        <WishListNoItems />
+      )}
+    </>
   );
 }
 

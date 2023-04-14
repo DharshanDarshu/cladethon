@@ -7,15 +7,22 @@ function Success() {
   const nextCookies = cookies();
   const token = nextCookies.get("user");
   const user = token && JSON.parse(token?.value);
-  console.log(user);
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  const accessToken = nextCookies.get("access_token");
+  const accesstoken =
+    accessToken && JSON.parse(accessToken?.value);
+
   if (user) {
-    fetch(`${restApi}/carts/${user.email}`)
+    console.log("Hi");
+    fetch(`${process.env.RESTFUL_API}/carts`, {
+      headers: {
+        Authorization: "Bearer " + accesstoken,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         data.carts.map((cart: any) => {
-          fetch(`${restApi}/orders`, {
+          fetch(`${process.env.RESTFUL_API}/orders`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
@@ -26,26 +33,30 @@ function Success() {
             }),
           })
             .then((res) => res.json())
-            .then((data) => console.log(data));
+            .then((data) => {
+              console.log(data);
+              fetch(
+                `${process.env.RESTFUL_API}/carts/empty`,
+                {
+                  method: "PATCH",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    email: user.email,
+                  }),
+                },
+              )
+                .then((res) => res.json())
+                .then((data) => console.log(data));
+            });
         });
       });
-
-    // const cart = await cartRes.json();
-
-    // console.log(cart.carts);
-
-    fetch(`${restApi}/carts/empty`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: user.email,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
   }
+
+  // const cart = await cartRes.json();
+
+  // console.log(cart.carts);
 
   return (
     <>

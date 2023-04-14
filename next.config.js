@@ -11,4 +11,8 @@ module.exports = {
       "cladethon-hosted-service.vercel.app",
     ],
   },
+  env: {
+    mapbox_key:
+      "pk.eyJ1IjoiZGFyc2hhbmRhcnNodSIsImEiOiJjbGZtNGEzbWswN2wzM3dtbWdmNWoydmR2In0.hjk5vAGCBh-GBgGeiSneBA",
+  },
 };

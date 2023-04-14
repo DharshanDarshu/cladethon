@@ -1,7 +1,9 @@
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 
 type Props = {
   order: {
+    _id: string;
     image: string;
     title: string;
     price: string;
@@ -12,9 +14,10 @@ type Props = {
 };
 
 function Order({ order }: Props) {
-  console.log(order.order_date);
   return (
-    <div className='border-b flex space-x-6 py-2 px-6'>
+    <Link
+      href={`/order/${order._id}`}
+      className='border-b flex space-x-6 py-2 px-6'>
       <img
         className='h-[200px]'
         src={`${process.env.RESTFUL_API}/image/${order.image}`}
@@ -46,7 +49,7 @@ function Order({ order }: Props) {
         <CheckCircleIcon className='w-12 h-12 text-green-600' />
         <p className='font-semibold'>Order Placed</p>
       </div>
-    </div>
+    </Link>
   );
 }
 

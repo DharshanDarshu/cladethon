@@ -20,8 +20,9 @@ function WishList({
   onAddToCart,
   token,
 }: Props) {
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  // const restApi =
+  //   "https://cladethon-hosted-service.vercel.app";
+  const restApi = "http://localhost:4000";
   const removeWishList = async () => {
     const response = await fetch(
       `${restApi}/wishlist/remove`,

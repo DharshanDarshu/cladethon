@@ -11,8 +11,9 @@ type Props = {
   token: string;
 };
 
-const restApi =
-  "https://cladethon-hosted-service.vercel.app";
+// const restApi =
+//   "https://cladethon-hosted-service.vercel.app";
+const restApi = "http://localhost:4000";
 
 const fetcher = (token: any) =>
   fetch(`${restApi}/carts/`, {

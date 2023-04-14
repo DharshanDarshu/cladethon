@@ -2,7 +2,6 @@
 
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
-import { Router } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -23,8 +22,9 @@ function AddToCart({
 }: Props) {
   const router = useRouter();
   const [changeBtn, setChangeBtn] = useState(false);
-  const restApi =
-    "https://cladethon-hosted-service.vercel.app";
+  // const restApi =
+  //   "https://cladethon-hosted-service.vercel.app";
+  const restApi = "http://localhost:4000";
   const handleAddToCart = async () => {
     if (changeBtn) {
       router.push("/cart");

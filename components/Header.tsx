@@ -1,5 +1,6 @@
 import Image from "next/image";
 import {
+  GlobeAmericasIcon,
   HeartIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -35,20 +36,23 @@ function Header() {
             <Link href='/categories/womens'>WOMEN</Link>
           </li>
           <li>
-            <Link href='/categories/kids'>KIDS</Link>
+            <Link href='/customer'>CUSTOMER</Link>
           </li>
           <li>
-            <Link href='/categories/electronics'>
-              ELECTRONIC
+            <Link href='/medical/pharmacy'>PHARMACY</Link>
+          </li>
+          <li>
+            <Link href='/medical/doctor'>MEDICAL</Link>
+          </li>
+          <li>
+            <Link
+              href='/medical/emergency'
+              className='relative'>
+              EMERGENCY
+              <span className='absolute -top-1 -right-[3px] animate-pulse p-[1px] text-xs rounded-full bg-red-300'>
+                <GlobeAmericasIcon className='w-4 h-4 text-gray-600' />
+              </span>
             </Link>
-          </li>
-          <li>
-            <Link href='/categories/womens/beauty'>
-              BEAUTY
-            </Link>
-          </li>
-          <li>
-            <Link href='/categories/sports'>SPORTS</Link>
           </li>
         </ul>
       </nav>
